@@ -1,0 +1,44 @@
+{% load static %} <!-- carregar arquivo da pasta static -->
+
+<nav class="w-full flex justify-between items-center py-3 px-4 fixed z-50"> <!-- tailwind. barra de navegação ter a largura da página inteira. flex justify distribui os objetos. padding coloca espaço nas bordas. fixa no topo. z mantém as coisas na frente ou atrás das outras -->
+    <div class="w-6/12"> <!-- tailwind. divide a navegação ao meio, com largura 6 de 12 -->
+        <a href="/">
+           <img class="w-2/12" src="{% static 'images/hashflix.png' %}"> <!-- a imagem ocupa 5 espaços do primeiro div. bloco de estrutura do arquivo settings para buscar um arquivo static (imagem) -->
+        </a>
+    </div>
+
+    <div class="w-6/12 flex flex-nowrap justify-end"> <!-- tailwind. divide a navegação ao meio, com largura 6 de 12. flex nowrap não quebra linha dos objetos no flex, fica um do lado do outro. justify-end alinha no final da tela -->
+        {% if user.is_authenticated %} <!-- mostra a pesquisa, login e editar perfil apenas se o usuário estiver logado -->
+        <div class="mr-2"> <!-- margin right de 2px. 1º div pra pesquisar -->
+            <form method="get" action="{% url 'filme:pesquisafilme' %}"> <!-- filme é do namespace em hashflix/urls.py e pesquisafilme é name do filme/urls.py -->
+                <input type="text" class="py-1 px-2 rounded-md text-black" name="query" value="{{ request.GET.query }}" placeholder="Pesquisar..."> <!-- tailwind. padding. arredondar bordas. name="query" é o parâmetro que vai para a barra de pesquisa da url quando digita alguma coisa na busca. value pega a requisição do query e mantém escrito no campo de pesquisa -->
+                <input type="submit" value="">
+            </form>
+        </div>
+        {% endif %}
+        <div class="mr-2"> <!-- margin right de 2px. 2º div para sair -->
+            {% if user.is_authenticated %} <!-- se estiver logado, mostra o botão sair -->
+            <a href="{% url 'filme:logout' %}"> <!-- leva para a url de logout -->
+                <button class="bg-red-600 text-white py-1 px-3 rounded-md"> <!-- tailwind -->
+                    Sair
+                </button>
+            </a>
+            {% else %} <!-- se não estiver logado, mostra o botão login -->
+            <a href="{% url 'filme:login' %}"> <!-- leva para a url de login -->
+                <button class="bg-red-600 text-white py-1 px-3 rounded-md"> <!-- tailwind -->
+                    Login
+                </button>
+            </a>
+            {% endif %}
+        </div>
+        {% if user.is_authenticated %} <!-- mostra a pesquisa, login e editar perfil apenas se o usuário estiver logado -->
+        <div class="mr-2"> <!-- margin right de 2px. 3º div para editar perfil -->
+            <a href="{% url 'filme:editarperfil' user.pk %}"> <!-- leva para a url de editar perfil -->
+                <button class="bg-red-600 text-white py-1 px-3 rounded-md"> <!-- tailwind -->
+                    Editar Perfil
+                </button>
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</nav>
